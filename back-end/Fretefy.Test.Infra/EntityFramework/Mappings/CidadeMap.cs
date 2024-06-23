@@ -18,7 +18,7 @@ namespace Fretefy.Test.Infra.EntityFramework.Mappings
                 new Cidade("Macapá", "AP"),
                 new Cidade("Manaus", "AM"),
                 new Cidade("Salvador", "BA"),
-                new Cidade("Fortaleza", " CE"),
+                new Cidade("Fortaleza", "CE"),
                 new Cidade("Brasília", "DF"),
                 new Cidade("Vitória", "ES"),
                 new Cidade("Goiânia", "GO"),
