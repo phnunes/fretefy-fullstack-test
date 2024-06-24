@@ -15,6 +15,6 @@ namespace Fretefy.Test.Domain.Entities
         public int Id { get; set; }
         public string Nome { get; set; }
 
-        public List<Cidade> Cidades { get; set; }
+        public virtual ICollection<RegiaoCidade> RegiaoCidade { get; set; }
     }
 }

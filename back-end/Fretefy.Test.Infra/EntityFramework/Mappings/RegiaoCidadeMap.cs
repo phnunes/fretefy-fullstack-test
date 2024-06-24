@@ -12,38 +12,39 @@ namespace Fretefy.Test.Infra.EntityFramework.Mappings
         public void Configure(EntityTypeBuilder<RegiaoCidade> builder)
         {
             builder.HasData(
-               new RegiaoCidade(5, "Rio Branco"),
-               new RegiaoCidade(5, "Manaus"),
-               new RegiaoCidade(5, "Goiânia"),
-               new RegiaoCidade(5, "Belém"),
-               new RegiaoCidade(5, "Palmas"),
-               new RegiaoCidade(5, "Porto Velho"),
 
-               new RegiaoCidade(4, "Maceió"),
-               new RegiaoCidade(4, "Macapá"),
-               new RegiaoCidade(4, "Salvador"),
-               new RegiaoCidade(4, "Fortaleza"),
-               new RegiaoCidade(4, "São Luís"),
-               new RegiaoCidade(4, "Cuiabá"),
-               new RegiaoCidade(4, "João Pessoa"),
-               new RegiaoCidade(4, "Recife"),
-               new RegiaoCidade(4, "Teresina"),
-               new RegiaoCidade(4, "Aracaju"),
-               new RegiaoCidade(4, "Boa Vista"),
-               new RegiaoCidade(4, "Natal"),
+               new RegiaoCidade("Rio Branco", 5),
+               new RegiaoCidade("Manaus", 5),
+               new RegiaoCidade("Goiânia", 5),
+               new RegiaoCidade("Belém", 5),
+               new RegiaoCidade("Palmas", 5),
+               new RegiaoCidade("Porto Velho", 5),
 
-               new RegiaoCidade(3, "Brasília"),
-               new RegiaoCidade(3, "Cuiabá"),
-               new RegiaoCidade(3, "Campo Grande"),
+               new RegiaoCidade("Maceió", 4),
+               new RegiaoCidade("Macapá", 4),
+               new RegiaoCidade("Salvador", 4),
+               new RegiaoCidade("Fortaleza", 4),
+               new RegiaoCidade("São Luís", 4),
+               new RegiaoCidade("Cuiabá", 4),
+               new RegiaoCidade("João Pessoa", 4),
+               new RegiaoCidade("Recife", 4),
+               new RegiaoCidade("Teresina", 4),
+               new RegiaoCidade("Aracaju", 4),
+               new RegiaoCidade("Boa Vista", 4),
+               new RegiaoCidade("Natal", 4),
 
-               new RegiaoCidade(2, "Vitória"),
-               new RegiaoCidade(2, "Belo Horizonte"),
-               new RegiaoCidade(2, "Rio de Janeiro"),
-               new RegiaoCidade(2, "São Paulo"),
+               new RegiaoCidade("Brasília", 3),
+               new RegiaoCidade("Cuiabá", 3),
+               new RegiaoCidade("Campo Grande", 3),
 
-               new RegiaoCidade(1, "Curitiba"),
-               new RegiaoCidade(1, "Florianópolis"),
-               new RegiaoCidade(1, "Porto Alegre")
+               new RegiaoCidade("Vitória", 2),
+               new RegiaoCidade("Belo Horizonte", 2),
+               new RegiaoCidade("Rio de Janeiro", 2),
+               new RegiaoCidade("São Paulo", 2),
+
+               new RegiaoCidade("Curitiba", 1),
+               new RegiaoCidade("Florianópolis", 1),
+               new RegiaoCidade("Porto Alegre", 1)
                );
         }
 
