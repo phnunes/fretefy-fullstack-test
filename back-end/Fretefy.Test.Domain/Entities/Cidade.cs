@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Fretefy.Test.Domain.Entities
 {
@@ -21,5 +22,6 @@ namespace Fretefy.Test.Domain.Entities
         public string Nome { get; set; }
 
         public string UF { get; set; }
+        public virtual ICollection<RegiaoCidade> RegiaoCidade { get; set; }
     }
 }

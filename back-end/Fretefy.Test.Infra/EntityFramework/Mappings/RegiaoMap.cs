@@ -8,15 +8,18 @@ namespace Fretefy.Test.Infra.EntityFramework.Mappings
     {
         public void Configure(EntityTypeBuilder<Regiao> builder)
         {
-            builder.Property(p => p.Nome).HasMaxLength(100).IsRequired();
+            builder.HasKey(r => r.Id);
 
-            builder.HasData(
-                new Regiao(1, "Sul"),
-                new Regiao(2, "Sudeste"),
-                new Regiao(3, "Centro-Oeste"),
-                new Regiao(4, "Nordeste"),
-                new Regiao(5, "Norte")
-                );
+            builder.Property(r => r.Nome)
+                   .HasMaxLength(20)
+                   .IsRequired();
+
+            builder.HasIndex(r => r.Nome)
+                   .IsUnique();
+
+            builder.HasMany(r => r.RegiaoCidade)
+                   .WithOne(c => c.Regiao)
+                   .HasForeignKey(c => c.RegiaoId);
         }
     }
 }
