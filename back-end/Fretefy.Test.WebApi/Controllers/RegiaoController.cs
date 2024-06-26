@@ -1,4 +1,5 @@
 ﻿using Fretefy.Test.Domain.Entities;
+using Fretefy.Test.Domain.Entities.RequestModels;
 using Fretefy.Test.Domain.Interfaces;
 using Fretefy.Test.Domain.Interfaces.Services;
 using Fretefy.Test.Domain.Services;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Fretefy.Test.WebApi.Controllers
 {
@@ -22,39 +24,36 @@ namespace Fretefy.Test.WebApi.Controllers
 
 
         [HttpGet]
-        public IActionResult List()
+        public async Task<IActionResult> List()
         {
-            IEnumerable<Regiao> regioes;
-
-            regioes = _regiaoService.List();
-
+            var regioes = await _regiaoService.ListAsync();
             return Ok(regioes);
         }
 
         [HttpPost]
-        public IActionResult Create(Regiao regiao)
+        public async Task<IActionResult> Create(RegiaoRequest regiao)
         {
 
-            var regionCreated = _regiaoService.Create(regiao);
+            var regionCreated = await _regiaoService.CreateAsync(regiao);
 
-            if (regionCreated.Any())
+            if (regionCreated is null)
             {
-                return Ok(regionCreated);
+               return BadRequest();
             }
-            return BadRequest();
+            return Ok(regionCreated);
         }
 
         [HttpPut]
-        public IActionResult Update(Regiao regiao)
+        public async Task<IActionResult> Update(RegiaoRequest regiao)
         {
 
-            var regionCreated = _regiaoService.Update(regiao);
+            var regionUpdated = await _regiaoService.UpdateAsync(regiao);
 
-            if (regionCreated.Any())
+            if (regionUpdated is null)
             {
-                return Ok(regionCreated);
+                return BadRequest();
             }
-            return BadRequest();
+            return Ok(regionUpdated);
         }
 
     }

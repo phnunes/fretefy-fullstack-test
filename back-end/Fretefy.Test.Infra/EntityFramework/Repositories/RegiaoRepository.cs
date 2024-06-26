@@ -1,59 +1,119 @@
 ﻿using Fretefy.Test.Domain.Entities;
+using Fretefy.Test.Domain.Entities.RequestModels;
 using Fretefy.Test.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Sqlite.Design.Internal;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Fretefy.Test.Infra.EntityFramework.Repositories
 {
     public class RegiaoRepository : IRegiaoRepository
     {
-        private DbSet<Regiao> _dbSet;
-        private DbSet<Cidade> _dbSetCity;
+        private readonly TestDbContext _context;
+        private readonly ICidadeRepository _cidadeRepository;
 
-        public RegiaoRepository(DbContext dbContext)
+        public RegiaoRepository(TestDbContext context, ICidadeRepository cidadeRepository)
         {
-            _dbSet = dbContext.Set<Regiao>();
+            _context = context;
+            _cidadeRepository = cidadeRepository;
         }
 
-        public IQueryable<Regiao> Create(Regiao regiaoRequest)
+        public async Task<RegiaoRequest> CreateAsync(RegiaoRequest regiaoRequest)
         {
-            if (regiaoRequest == null)
+            try
             {
-                throw new ArgumentNullException("Parâmetro nulo passado para o endpoint");
-            }
-            var regiaoEntity = _dbSet.Add(regiaoRequest);
-            regiaoEntity.Context.SaveChanges();
+                if (regiaoRequest is null)
+                {
+                    throw new ArgumentNullException("Parâmetro null.");
+                }
 
-            return _dbSet.AsQueryable();
+                if (_context.Regiao.Any(r => r.Nome == regiaoRequest.Nome))
+                {
+                    throw new ArgumentException("Região já cadastrada.");
+                }
+              
+                var novaRegiao = _context.Regiao.Add(regiaoRequest);
+
+                foreach (var cidade in regiaoRequest.ListaCidades)
+                {
+                    var cidadeDb = _cidadeRepository
+                               .List()
+                               .Where(c => c.Nome == cidade)
+                               .FirstOrDefault();
+
+                    var novaRegiaoCidade = new RegiaoCidade()
+                    {
+                        CidadeId = cidadeDb.Id,
+                        RegiaoId = regiaoRequest.Id
+                    };
+
+                    _context.RegiaoCidade.Add(novaRegiaoCidade);
+                }
+
+                await _context.SaveChangesAsync();
+
+                return regiaoRequest;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao criar Região. Exception: " + ex.InnerException);
+            }
         }
 
-        public IQueryable<Regiao> List()
+        public async Task<IEnumerable<Regiao>> ListAsync()
         {
-            _dbSet.Include(x => x.RegiaoCidade).ToList();
-            return _dbSet.AsQueryable();
+            var listRegiao = await _context.Regiao
+                                    .Include(reg => reg.RegiaoCidade)
+                                    .ThenInclude(c => c.Cidade)
+                                    .AsNoTracking()
+                                    .ToListAsync();
+            return listRegiao;
         }
 
-        public IQueryable<Regiao> Update(Regiao regiaoRequest)
+        public async Task<RegiaoRequest> UpdateAsync(RegiaoRequest regiaoRequest)
         {
-            if (regiaoRequest == null)
+            try
             {
-                throw new ArgumentNullException("Parâmetro nulo passado para o endpoint");
-            }
+                var regiaoOnDb = await _context.Regiao
+                                    .Include(r => r.RegiaoCidade)
+                                    .FirstOrDefaultAsync(r => r.Id == regiaoRequest.Id);
 
-            var regiaoFind = _dbSet.Where(w => EF.Functions.Like(w.Nome, $"%{regiaoRequest.Nome}%"));
-            if (regiaoFind == null)
+                if (regiaoOnDb is null)
+                    throw new ArgumentException("Região não existe no banco.");
+
+                regiaoOnDb.Nome = regiaoRequest.Nome;
+                regiaoOnDb.Status = regiaoRequest.Status;
+
+                foreach (var cidade in regiaoRequest.ListaCidades)
+                {
+                    var cidadeDb = _cidadeRepository
+                               .List()
+                               .Where(c => c.Nome == cidade)
+                               .FirstOrDefault();
+
+                    var novaRegiaoCidade = new RegiaoCidade()
+                    {
+                        CidadeId = cidadeDb.Id,
+                        RegiaoId = regiaoRequest.Id
+                    };
+                    
+                    _context.RegiaoCidade.Add(novaRegiaoCidade);
+                }
+
+                await _context.SaveChangesAsync();
+                
+                return regiaoRequest;
+
+            }
+            catch (Exception ex)
             {
-                throw new DataException("Região não encontrada");
+                throw new Exception("Erro ao atualizar Região. Exception: " + ex.InnerException);
             }
-
-            var regiaoEntity = _dbSet.Update(regiaoRequest);
-            regiaoEntity.Context.SaveChanges();
-
-            return _dbSet.AsQueryable();
         }
     }
 }

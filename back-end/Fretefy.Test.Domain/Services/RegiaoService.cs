@@ -1,9 +1,11 @@
 ﻿using Fretefy.Test.Domain.Entities;
+using Fretefy.Test.Domain.Entities.RequestModels;
 using Fretefy.Test.Domain.Interfaces.Repositories;
 using Fretefy.Test.Domain.Interfaces.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Fretefy.Test.Domain.Services
 {
@@ -16,19 +18,19 @@ namespace Fretefy.Test.Domain.Services
             _regiaoRepository = regiaoRepository;
         }
 
-        public IEnumerable<Regiao> Create(Regiao regiaoRequest)
+        public async Task<RegiaoRequest> CreateAsync(RegiaoRequest regiaoRequest)
         {
-            return _regiaoRepository.Create(regiaoRequest);
+            return await _regiaoRepository.CreateAsync(regiaoRequest);
         }
 
-        public IEnumerable<Regiao> List()
+        public async Task<IEnumerable<Regiao>> ListAsync()
         {
-            return _regiaoRepository.List();
+            return await _regiaoRepository.ListAsync();
         }
 
-        public IEnumerable<Regiao> Update(Regiao regiaoRequest)
+        public async Task<RegiaoRequest> UpdateAsync(RegiaoRequest regiaoRequest)
         {
-            return _regiaoRepository.Update(regiaoRequest);
+            return await _regiaoRepository.UpdateAsync(regiaoRequest);
         }
     }
 }

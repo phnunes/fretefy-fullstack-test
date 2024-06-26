@@ -24,21 +24,13 @@ namespace Fretefy.Test.Infra.EntityFramework
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Regiao>()
-            .HasMany(e => e.RegiaoCidade)
-            .WithOne(e => e.Regiao)
-            .HasForeignKey(e => e.RegiaoId)
-            .IsRequired();
-
-            modelBuilder.Entity<RegiaoCidade>()
-               .HasOne<Regiao>()
-               .WithMany(e => e.RegiaoCidade)
-               .HasForeignKey(e => e.RegiaoId)
-               .IsRequired();
-
+            base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new CidadeMap());
             modelBuilder.ApplyConfiguration(new RegiaoMap());
             modelBuilder.ApplyConfiguration(new RegiaoCidadeMap());
         }
+        public DbSet<Cidade> Cidade { get; set; }
+        public DbSet<Regiao> Regiao { get; set; }
+        public DbSet<RegiaoCidade> RegiaoCidade { get; set; }
     }
 }
